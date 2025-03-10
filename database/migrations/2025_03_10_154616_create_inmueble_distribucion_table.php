@@ -14,13 +14,11 @@ return new class extends Migration
         Schema::create('inmueble_distribucion', function (Blueprint $table) {
             $table->id();
 
-            
-            $table->unsignedBigInteger('inmuebles_id'); // Debes definir esta columna para la clave foránea
-            $table->foreign('inmuebles_id')->references('id')->on('inmuebles')->onDelete('cascade'); // crear la relacion
+            $table->unsignedBigInteger('inmueble_id');
+            $table->foreign('inmueble_id')->references('id')->on('inmuebles')->onDelete('cascade');
 
-            $table->unsignedBigInteger('distribucion_id'); // Debes definir esta columna para la clave foránea
-            $table->foreign('distribucion_id')->references('id')->on('distribucions')->onDelete('cascade'); // crear la relacion
-
+            $table->unsignedBigInteger('distribucion_id');
+            $table->foreign('distribucion_id')->references('id')->on('distribucions')->onDelete('cascade');
 
             $table->timestamps();
         });
