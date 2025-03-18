@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -7,35 +9,39 @@ class LimaCallaoSeeder extends Seeder
 {
     public function run()
     {
-        // ✅ Insertar Departamento Lima
-        $limaDepartamentoId = DB::table('departamentos')->insertGetId([
-            'nombre' => 'Lima',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        // ✅ Insertar o recuperar Departamento Lima
+        $limaDepartamentoId = DB::table('departamentos')->where('nombre', 'Lima')->value('id') 
+            ?? DB::table('departamentos')->insertGetId([
+                'nombre' => 'Lima',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
 
-        // ✅ Insertar Departamento Callao
-        $callaoDepartamentoId = DB::table('departamentos')->insertGetId([
-            'nombre' => 'Callao',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        // ✅ Insertar o recuperar Departamento Callao
+        $callaoDepartamentoId = DB::table('departamentos')->where('nombre', 'Callao')->value('id') 
+            ?? DB::table('departamentos')->insertGetId([
+                'nombre' => 'Callao',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
 
         // ================== 📍 Provincias de Lima ==================
-        $provinciaLimaMetropolitanaId = DB::table('provincias')->insertGetId([
-            'nombre' => 'Lima Metropolitana',
-            'departamento_id' => $limaDepartamentoId,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $provinciaLimaMetropolitanaId = DB::table('provincias')->where('nombre', 'Lima Metropolitana')->value('id') 
+            ?? DB::table('provincias')->insertGetId([
+                'nombre' => 'Lima Metropolitana',
+                'departamento_id' => $limaDepartamentoId,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
 
         // ================== 📍 Provincias de Callao ==================
-        $provinciaCallaoId = DB::table('provincias')->insertGetId([
-            'nombre' => 'Callao',
-            'departamento_id' => $callaoDepartamentoId,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $provinciaCallaoId = DB::table('provincias')->where('nombre', 'Callao')->value('id') 
+            ?? DB::table('provincias')->insertGetId([
+                'nombre' => 'Callao',
+                'departamento_id' => $callaoDepartamentoId,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
 
         // ================== 📍 Distritos de Lima Metropolitana ==================
         $distritosLima = [
@@ -51,12 +57,10 @@ class LimaCallaoSeeder extends Seeder
         ];
 
         foreach ($distritosLima as $distrito) {
-            DB::table('distritos')->insert([
-                'nombre' => $distrito,
-                'provincia_id' => $provinciaLimaMetropolitanaId,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            DB::table('distritos')->updateOrInsert(
+                ['nombre' => $distrito, 'provincia_id' => $provinciaLimaMetropolitanaId],
+                ['created_at' => now(), 'updated_at' => now()]
+            );
         }
 
         // ================== 📍 Distritos de Callao ==================
@@ -66,12 +70,13 @@ class LimaCallaoSeeder extends Seeder
         ];
 
         foreach ($distritosCallao as $distrito) {
-            DB::table('distritos')->insert([
-                'nombre' => $distrito,
-                'provincia_id' => $provinciaCallaoId,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            DB::table('distritos')->updateOrInsert(
+                ['nombre' => $distrito, 'provincia_id' => $provinciaCallaoId],
+                ['created_at' => now(), 'updated_at' => now()]
+            );
         }
+
+        // ✅ Mensaje en consola
+        $this->command->info('✔ Departamentos, provincias y distritos insertados correctamente.');
     }
 }

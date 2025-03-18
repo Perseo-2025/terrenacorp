@@ -7,38 +7,60 @@ use Illuminate\Support\Facades\DB;
 
 class SubTipoInmuebleSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
         // Obtener IDs de tipos de inmuebles desde la tabla tipo_inmuebles
         $tipos = DB::table('tipo_inmuebles')->pluck('id', 'nombre');
 
+        // Verificar que los tipos necesarios existen en la base de datos
+        $tiposNecesarios = ['Casa', 'Departamento', 'Oficina', 'Local', 'Terreno'];
+        foreach ($tiposNecesarios as $tipo) {
+            if (!isset($tipos[$tipo])) {
+                $this->command->error("⚠ El tipo de inmueble '{$tipo}' no existe en la base de datos.");
+            }
+        }
+
+        // Lista de subtipos a insertar (sin Comercial)
         $subtipos = [
-            // Para Casa
-            ['id_tipo_inmueble' => $tipos['Casa'] ?? null, 'nombre' => 'Urbanización', 'created_at' => now(), 'updated_at' => now()],
-            ['id_tipo_inmueble' => $tipos['Casa'] ?? null, 'nombre' => 'Condominio', 'created_at' => now(), 'updated_at' => now()],
-            ['id_tipo_inmueble' => $tipos['Casa'] ?? null, 'nombre' => 'Rústico', 'created_at' => now(), 'updated_at' => now()],
-            ['id_tipo_inmueble' => $tipos['Casa'] ?? null, 'nombre' => 'De Campo', 'created_at' => now(), 'updated_at' => now()],
-            ['id_tipo_inmueble' => $tipos['Casa'] ?? null, 'nombre' => 'De Playa', 'created_at' => now(), 'updated_at' => now()],
+            // ✅ Para Casa
+            ['tipo_inmueble_id' => $tipos['Casa'] ?? null, 'nombre' => 'Urbanización'],
+            ['tipo_inmueble_id' => $tipos['Casa'] ?? null, 'nombre' => 'Condominio'],
+            ['tipo_inmueble_id' => $tipos['Casa'] ?? null, 'nombre' => 'Rústico'],
+            ['tipo_inmueble_id' => $tipos['Casa'] ?? null, 'nombre' => 'De Campo'],
+            ['tipo_inmueble_id' => $tipos['Casa'] ?? null, 'nombre' => 'De Playa'],
 
-            // Para Departamento
-            ['id_tipo_inmueble' => $tipos['Departamento'] ?? null, 'nombre' => 'Flat', 'created_at' => now(), 'updated_at' => now()],
-            ['id_tipo_inmueble' => $tipos['Departamento'] ?? null, 'nombre' => 'Duplex', 'created_at' => now(), 'updated_at' => now()],
-            ['id_tipo_inmueble' => $tipos['Departamento'] ?? null, 'nombre' => 'Triplex', 'created_at' => now(), 'updated_at' => now()],
+            // ✅ Para Departamento
+            ['tipo_inmueble_id' => $tipos['Departamento'] ?? null, 'nombre' => 'Flat'],
+            ['tipo_inmueble_id' => $tipos['Departamento'] ?? null, 'nombre' => 'Dúplex'],
+            ['tipo_inmueble_id' => $tipos['Departamento'] ?? null, 'nombre' => 'Tríplex'],
 
-            // Para Comercial
-            ['id_tipo_inmueble' => $tipos['Comercial'] ?? null, 'nombre' => 'Edificio Empresarial', 'created_at' => now(), 'updated_at' => now()],
-            ['id_tipo_inmueble' => $tipos['Comercial'] ?? null, 'nombre' => 'Comercial', 'created_at' => now(), 'updated_at' => now()],
-            ['id_tipo_inmueble' => $tipos['Comercial'] ?? null, 'nombre' => 'Industrial', 'created_at' => now(), 'updated_at' => now()],
+            // ✅ Para Oficina
+            ['tipo_inmueble_id' => $tipos['Oficina'] ?? null, 'nombre' => 'Coworking'],
+            ['tipo_inmueble_id' => $tipos['Oficina'] ?? null, 'nombre' => 'Oficina Privada'],
+            ['tipo_inmueble_id' => $tipos['Oficina'] ?? null, 'nombre' => 'Centro de Negocios'],
 
-            // Otros
-            ['id_tipo_inmueble' => $tipos['Terreno'] ?? null, 'nombre' => 'Residencial', 'created_at' => now(), 'updated_at' => now()],
-            ['id_tipo_inmueble' => $tipos['Terreno'] ?? null, 'nombre' => 'Agrícola', 'created_at' => now(), 'updated_at' => now()],
+            // ✅ Para Local
+            ['tipo_inmueble_id' => $tipos['Local'] ?? null, 'nombre' => 'Comercial'],
+            ['tipo_inmueble_id' => $tipos['Local'] ?? null, 'nombre' => 'Industrial'],
+            ['tipo_inmueble_id' => $tipos['Local'] ?? null, 'nombre' => 'Tienda Minorista'],
+
+            // ✅ Para Terreno
+            ['tipo_inmueble_id' => $tipos['Terreno'] ?? null, 'nombre' => 'Residencial'],
+            ['tipo_inmueble_id' => $tipos['Terreno'] ?? null, 'nombre' => 'Agrícola'],
         ];
 
-        // Insertar en la tabla sub_tipo_inmuebles
-        DB::table('sub_tipo_inmuebles')->insert($subtipos);
+        // Insertar solo si el tipo_inmueble_id existe
+        foreach ($subtipos as $subtipo) {
+            if ($subtipo['tipo_inmueble_id'] !== null) { // Evitar insertar si el ID es NULL
+                DB::table('sub_tipo_inmuebles')->updateOrInsert(
+                    ['nombre' => $subtipo['nombre'], 'tipo_inmueble_id' => $subtipo['tipo_inmueble_id']],
+                    ['created_at' => now(), 'updated_at' => now()]
+                );
+            } else {
+                $this->command->error("⚠ No se insertó '{$subtipo['nombre']}' porque su `tipo_inmueble_id` es NULL.");
+            }
+        }
+
+        $this->command->info('✔ Subtipos de inmueble insertados correctamente.');
     }
 }

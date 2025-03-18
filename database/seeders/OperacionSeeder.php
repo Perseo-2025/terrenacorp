@@ -7,21 +7,17 @@ use Illuminate\Support\Facades\DB;
 
 class OperacionSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
-        // Array de operaciones
-        $operaciones = [
-            ['tipo' => 'Venta', 'created_at' => now(), 'updated_at' => now()],
-            ['tipo' => 'Alquiler', 'created_at' => now(), 'updated_at' => now()],
-            ['tipo' => 'Venta/Alquiler', 'created_at' => now(), 'updated_at' => now()],
-        ];
+        $operaciones = ['Venta', 'Alquiler', 'Venta/Alquiler'];
 
-        // Inserción masiva
-        DB::table('operacions')->insert($operaciones);
+        foreach ($operaciones as $operacion) {
+            DB::table('operacions')->updateOrInsert(
+                ['tipo' => $operacion],
+                ['created_at' => now(), 'updated_at' => now()]
+            );
+        }
+
+        $this->command->info('✔ Operaciones insertadas correctamente.');
     }
 }

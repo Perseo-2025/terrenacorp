@@ -7,23 +7,17 @@ use Illuminate\Support\Facades\DB;
 
 class TipoInmuebleSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
-        // Lista de tipos de inmuebles
-        $tipos = [
-            ['nombre' => 'Casa', 'created_at' => now(), 'updated_at' => now()],
-            ['nombre' => 'Departamento', 'created_at' => now(), 'updated_at' => now()],
-            ['nombre' => 'Oficina', 'created_at' => now(), 'updated_at' => now()],
-            ['nombre' => 'Local', 'created_at' => now(), 'updated_at' => now()],
-            ['nombre' => 'Terreno', 'created_at' => now(), 'updated_at' => now()],
-        ];
+        $tipos = ['Casa', 'Departamento', 'Oficina', 'Local', 'Terreno'];
 
-        // Inserción masiva
-        DB::table('tipo_inmuebles')->insert($tipos);
+        foreach ($tipos as $tipo) {
+            DB::table('tipo_inmuebles')->updateOrInsert(
+                ['nombre' => $tipo],
+                ['created_at' => now(), 'updated_at' => now()]
+            );
+        }
+
+        $this->command->info('✔ Tipos de inmueble insertados correctamente.');
     }
 }

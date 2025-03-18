@@ -9,6 +9,9 @@ class Owner extends Model
 {
     use HasFactory;
 
+    
+    protected $table = 'owners';
+
     protected $fillable = [
         'name',
         'contact',
@@ -17,7 +20,18 @@ class Owner extends Model
         'telefono_fijo',
         'celular',
         'email',
+        'others',
         'status',
+        'users_id',
     ];
+    public function inmuebles()
+    {
+        return $this->hasMany(Inmueble::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'users_id');
+    }
     
 }
