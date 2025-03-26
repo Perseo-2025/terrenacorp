@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ColaboradorController;
+use App\Http\Controllers\InmueblesController;
 use App\Http\Controllers\OwnerController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,4 +28,10 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])-
     Route::get('colaboradores/index', [ColaboradorController::class, 'index'])->name('colaboradores.index');
 });
 
-/*  */
+/* Inmuebles */
+Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])->group(function () {
+    Route::get('inmuebles/index', [InmueblesController::class, 'index'])->name('inmuebles.index');
+});
+Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified'])->group(function () {
+    Route::get('inmuebles/create', [InmueblesController::class, 'create'])->name('inmuebles.create');
+});

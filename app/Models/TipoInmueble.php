@@ -14,6 +14,6 @@ class TipoInmueble extends Model
 
     public function subtipos()
     {
-        return $this->hasMany(SubTipoInmueble::class);
+        return $this->hasMany(SubTipoInmueble::class, 'tipo_inmueble_id');
     }
 }

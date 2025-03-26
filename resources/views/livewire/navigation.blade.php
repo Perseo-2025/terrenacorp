@@ -6,15 +6,15 @@
         <!-- Menú de navegación (Escritorio) -->
         <div class="hidden md:flex items-center space-x-6">
             <x-nav-link :href="route('dashboard')" class="text-white hover:text-gray-100 transition">Dashboard</x-na>
-            <x-nav-link :href="route('colaboradores.index')" class="text-white hover:text-gray-100 transition">Colaboradores</x-na>
+            <x-nav-link :href="route('colaboradores.index')" class="text-white hover:text-gray-100 transition">Usuarios</x-na>
             <x-nav-link :href="route('propietarios.index')" class="text-white hover:text-gray-100 transition">Propietarios</x-nav-link>
-            <a href="#" class="text-white hover:text-gray-300 transition">Inmuebles</a>
+            <x-nav-link :href="route('inmuebles.index')" class="text-white hover:text-gray-100 transition">Inmuebles</x-nav-link>
         </div>
 
         <!-- Usuario y perfil -->
         <div class="flex items-center space-x-4">
             @auth
-                <span class="hidden md:block text-sm text-gray-300 uppercase">ROL: SUPER JEFE | Bienvenido: <strong> {{ Auth::user()->name }} </strong></span>
+                <span class="hidden md:block text-sm text-gray-300 uppercase">Bienvenido: <strong> {{ Auth::user()->name }} </strong></span>
 
                 <!-- Menú desplegable del perfil -->
                 <div x-data="{ open: false }" class="relative">
@@ -55,9 +55,9 @@
     <!-- Menú móvil -->
     <div x-data="{ mobileOpen: false }" x-show="mobileOpen" class="md:hidden mt-4 bg-gray-800 p-4 rounded-lg">
         <x-nav-link :href="route('dashboard')" class="text-white hover:text-gray-100 transition">Dashboard</x-na>
-        <x-nav-link :href="route('colaboradores.index')" class="text-white hover:text-gray-100 transition">Colaboradores</x-na>
+        <x-nav-link :href="route('colaboradores.index')" class="text-white hover:text-gray-100 transition">Usuarios</x-na>
         <x-nav-link :href="route('propietarios.index')" class="text-white hover:text-gray-100 transition">Propietarios</x-nav-link>
-        <a href="#" class="text-white hover:text-gray-300 transition">Inmuebles</a>
+        <x-nav-link :href="route('inmuebles.index')" class="text-white hover:text-gray-100 transition">Inmuebles</x-nav-link>
         
         @auth
             <div class="mt-4 border-t border-gray-600 pt-4">

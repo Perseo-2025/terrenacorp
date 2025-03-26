@@ -2,17 +2,15 @@
 
     <!-- Buscador -->
     <div class="flex items-center justify-between mb-4">
-        <h2 class="text-xl font-bold text-gray-700">Gestión de Usuarios</h2>
-        <x-nav-link :href="route('propietarios.create')"
+        <h2 class="text-xl font-bold text-gray-700">Gestión de Inmuebles</h2>
+        <x-nav-link :href="route('inmuebles.create')"
             class="bg-blue-600 text-white hover:text-black font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 ease-in-out flex items-center space-x-2">
             <!-- Ícono Opcional -->
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M10 2a1 1 0 011 1v6h6a1 1 0 110 2h-6v6a1 1 0 11-2 0v-6H3a1 1 0 110-2h6V3a1 1 0 011-1z" />
             </svg>
-            <span>Agregar Usuario</span>
+            <span>Agregar Inmueble</span>
         </x-nav-link>
-    
-
 
         <div class="relative w-full max-w-md">
             <span class="absolute inset-y-0 left-0 flex items-center pl-3">

@@ -9,6 +9,9 @@ class Operacion extends Model
 {
     use HasFactory;
 
+    protected $table = 'operacions'; 
+    protected $fillable = ['tipo'];
+
     public function inmuebles()
     {
         return $this->hasMany(Inmueble::class);

@@ -14,6 +14,6 @@ class SubTipoInmueble extends Model
 
     public function tipo()
     {
-        return $this->belongsTo(TipoInmueble::class);
+        return $this->belongsTo(TipoInmueble::class, 'tipo_inmueble_id');
     }
 }
