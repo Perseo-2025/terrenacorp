@@ -18,26 +18,26 @@ class Step1 extends Component
 
     public function mount()
     {
-        $this->owners = Owner::pluck('name', 'id'); // Obtiene solo los nombres y los IDs
-        $this->operaciones = Operacion::pluck('tipo', 'id');
+        // Cargar datos en Livewire al inicio
+        $this->owners = Owner::pluck('name', 'id')->toArray();
+        $this->operaciones = Operacion::pluck('tipo', 'id')->toArray();
         $this->tiposInmuebles = TipoInmueble::all();
     }
 
-    public function updatedSelectedTipoInmueble()
+    public function cargarSubtipos()
     {
-        if ($this->selectedTipoInmueble) {
-            // Filtra los subtipos de inmueble según el tipo seleccionado
-            $this->subTiposInmuebles = SubTipoInmueble::where('tipo_inmueble_id', $this->selectedTipoInmueble)->get();
-            
-            // Reinicia la selección de subtipos
-            $this->selectedSubTipoInmueble = '';
-
-            // Para depuración, muestra los resultados en la pantalla
-            dd($this->subTiposInmuebles);
+        if (!empty($this->selectedTipoInmueble)) {
+            $this->subTiposInmuebles = SubTipoInmueble::where('tipo_inmueble_id', $this->selectedTipoInmueble)->get(); // ⚠️ NO USAR toArray()
+            logger("✅ Subtipos encontrados: " . json_encode($this->subTiposInmuebles));
+            $this->selectedSubTipoInmueble = ''; // Reinicia la selección de subtipo
+        } else {
+            $this->subTiposInmuebles = collect(); // Mantenerlo como una colección vacía
+            logger("⚠️ No se encontraron subtipos.");
         }
+
+        $this->dispatch('refreshComponent'); // Para forzar actualización en Livewire
     }
-
-
+    
     public function render()
     {
         return view('livewire.property-steps.step1');
